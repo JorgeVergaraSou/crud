@@ -7,3 +7,4 @@ Crud creado siguiendo el tutorial de https://docs.nestjs.com/  y https://bluuweb
  bcryptjs
  JWT
  Class validator
+# crud
