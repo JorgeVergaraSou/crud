@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BreedsModule } from './breeds/breeds.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { DogModule } from './dog/dog.module';
+import { PetsModule } from './pets/pets.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { DogModule } from './dog/dog.module';
       autoLoadEntities: true, // CARGA LAS ENTITYS DE FORMA AUTOMATICA PARA NO HACERLO MANUAL
       synchronize: true, // TODO CAMBIO QUE SE GENERE ACA, SE SINCRONIZA CON LA "BD"
     }),    
-    CatsModule, BreedsModule, UsersModule, AuthModule, DogModule],
+    CatsModule, BreedsModule, UsersModule, AuthModule, PetsModule],
   controllers: [],
   providers: [],
 })

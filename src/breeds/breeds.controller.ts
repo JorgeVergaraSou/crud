@@ -19,7 +19,7 @@ export class BreedsController {
   findAll() {
     return this.breedsService.findAll();
   }
-
+/*
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.breedsService.findOne(+id);
@@ -34,4 +34,5 @@ export class BreedsController {
   remove(@Param('id') id: number) {
     return this.breedsService.remove(+id);
   }
+  */
 }
