@@ -25,14 +25,24 @@ export class PetsService {
   return await this.petRepository.save({
     ...createPetDto,
     breed: breed,
-    userEmail: user.email,
+    userEmail: user.email
   })
 }
   // ---------------- FIN CREATE ----------
 
-  findAll() {
-    return `This action returns all pets`;
-  }
+  /** --------------- INICIO FINDALL ---------------------- */
+  async findAll(user: UserActiveInterface) {
+    /** si el rol es ADMIN, regresara todos los registros */
+        if (user.role === Role.ADMIN){
+          return await this.petRepository.find();
+        }
+    /** si el rol es USER, regresara solo los registros del USUARIO */
+        return await this.petRepository.find({
+          where: { userEmail: user.email}
+        });
+      }
+
+    /** --------------- FIN FINDALL ---------------------- */    
 
   findOne(id: number) {
     return `This action returns a #${id} pet`;
@@ -43,17 +53,16 @@ export class PetsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} pet`;
+    return this.petRepository.softDelete(id);
   }
 
   private async validateBreed(breed: string){
-    /* cuando vayamos a crear un gato primero va a buscar el nombre de la raza  */
+    /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
     const breedEntity = await this.breedRepository.findOneBy({ name: breed });
     /* si no existe va lanzar un error y si existe va a guardar el gato co la raza en contrada */
     if (!breedEntity) {
       throw new BadRequestException('Breed not found');
     }
-
     return breedEntity
   }
 }

@@ -2,9 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
-import { ActiveUser } from 'src/common/decorators/active-user.decorator';
-import { UserActiveInterface } from 'src/common/interfaces/user-active.interface';
+import { ActiveUser } from '../common/decorators/active-user.decorator';
+import { UserActiveInterface } from '../common/interfaces/user-active.interface';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { Role } from '../common/enums/role.enum';
 
+@Auth(Role.USER)  
 @Controller('pets')
 export class PetsController {
   constructor(private readonly petsService: PetsService) {}
@@ -15,8 +18,8 @@ export class PetsController {
   }
 
   @Get()
-  findAll() {
-    return this.petsService.findAll();
+  findAll(@ActiveUser() user: UserActiveInterface) {
+    return this.petsService.findAll(user);
   }
 
   @Get(':id')
@@ -30,7 +33,7 @@ export class PetsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.petsService.remove(+id);
   }
 }

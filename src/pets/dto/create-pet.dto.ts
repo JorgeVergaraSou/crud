@@ -1,4 +1,5 @@
-import { IsString, MinLength, IsInt, IsPositive, IsOptional } from "class-validator";
+import { IsString, MinLength, IsInt, IsPositive, IsOptional, IsEnum } from "class-validator";
+import { PetEnum } from "../../common/enums/pet.enum";
 
 export class CreatePetDto {
     @IsString() // debe ser string
@@ -12,6 +13,10 @@ export class CreatePetDto {
      @IsString()
      @IsOptional() // es opcional
      breed?: string;
+
+     @IsEnum(PetEnum) // Valida que el valor sea uno de los miembros del enum
+     @IsOptional()
+     pet?: PetEnum;
 
      @IsString()
      @IsOptional()

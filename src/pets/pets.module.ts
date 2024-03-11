@@ -3,8 +3,8 @@ import { PetsService } from './pets.service';
 import { PetsController } from './pets.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Pet } from './entities/pet.entity';
-import { BreedsModule } from 'src/breeds/breeds.module';
-import { BreedsService } from 'src/breeds/breeds.service';
+import { BreedsModule } from '../breeds/breeds.module';
+import { BreedsService } from '../breeds/breeds.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Pet]), BreedsModule],

@@ -26,6 +26,12 @@ export class Pet {
         eager: true, 
       })
       breed: Breed;   
+
+      @Column()
+      description: string;
+
+      @Column()
+      image: string;
       
       @ManyToOne( () => User ) /** con esto le digo que debe usar el campo email como referencia */
       @JoinColumn({ name: 'userEmail', referencedColumnName: 'email', })
@@ -34,11 +40,7 @@ export class Pet {
       @Column()
       userEmail: string;  
       
-      @Column()
-      description: string;
 
-      @Column()
-      image: string;
 
 }
 

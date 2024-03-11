@@ -5,16 +5,18 @@ import { UpdateBreedDto } from './dto/update-breed.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from "../common/enums/role.enum";
 
-@Auth(Role.ADMIN)
+
 @Controller('breeds')
 export class BreedsController {
   constructor(private readonly breedsService: BreedsService) {}
 
+  @Auth(Role.ADMIN)
   @Post()
   create(@Body() createBreedDto: CreateBreedDto) {
     return this.breedsService.create(createBreedDto);
   }
 
+  @Auth(Role.USER)
   @Get()
   findAll() {
     return this.breedsService.findAll();

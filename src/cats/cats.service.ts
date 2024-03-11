@@ -113,11 +113,10 @@ if (user.role !== Role.ADMIN && cat.userEmail !== user.email){
   private async validateBreed(breed: string){
     /* cuando vayamos a crear un gato primero va a buscar el nombre de la raza  */
     const breedEntity = await this.breedRepository.findOneBy({ name: breed });
-    /* si no existe va lanzar un error y si existe va a guardar el gato co la raza en contrada */
+    /* si no existe va lanzar un error y si existe va a guardar el gato con la raza encontrada */
     if (!breedEntity) {
       throw new BadRequestException('Breed not found');
     }
-
     return breedEntity
   }
 }
