@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,13 +20,22 @@ export class PetsService {
  // ------------- INICIO CREATE -----------
  async create(createPetDto: CreatePetDto, user: UserActiveInterface) {
 
-  const breed = await this.validateBreed(createPetDto.breed)
-
-  return await this.petRepository.save({
-    ...createPetDto,
-    breed: breed,
-    userEmail: user.email
-  })
+  try {
+    const breed = await this.validateBreed(createPetDto.breed)
+    const insertPet =  await this.petRepository.save({
+      ...createPetDto,
+      breed: breed,
+      userEmail: user.email
+    })  
+    
+    if(insertPet){
+      return{ message: 'Mascota creada con exito'}
+    }else{
+      throw new InternalServerErrorException("Fallo la creación de la mascota");
+    }    
+  } catch (error) {
+    throw new InternalServerErrorException("Fallo la creación de la mascota");
+  }
 }
   // ---------------- FIN CREATE ----------
 
@@ -54,6 +63,10 @@ export class PetsService {
 
   remove(id: number) {
     return this.petRepository.softDelete(id);
+  }
+
+  restore(id: number) {
+    return this.petRepository.restore(id);
   }
 
   private async validateBreed(breed: string){
