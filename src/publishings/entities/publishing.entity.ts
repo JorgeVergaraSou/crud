@@ -1,8 +1,22 @@
-import { Entity } from "typeorm";
+import { Pet } from "../../pets/entities/pet.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Publishing {
+    @PrimaryGeneratedColumn()
+    idPublish: number;
 
+    @Column()
+    title: string;
+
+    @Column()
+    contenido: string;
+
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    fechaPublicacion: Date;
+
+    @ManyToOne(() => Pet, pet => pet.publishings) // Relación ManyToOne con Pet
+    pet: Pet;
 }
 /**
  * -- Tabla de Publicaciones

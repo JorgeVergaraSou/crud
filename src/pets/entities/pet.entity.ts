@@ -1,7 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { PetEnum } from "../../common/enums/pet.enum";
 import { Breed } from "../../breeds/entities/breed.entity";
 import { User } from "../../users/entities/user.entity";
+import { Publishing } from "../../publishings/entities/publishing.entity";
+
 
 @Entity()
 export class Pet {
@@ -21,27 +23,22 @@ export class Pet {
     @DeleteDateColumn()
     deletedAt: Date;
 
-    @ManyToOne(() => Breed , (breed) => breed.id, {
-        // cascade: true,
-        eager: true, 
-      })
-      breed: Breed;   
+    @ManyToOne(() => Breed, { eager: true }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
+    breed: Breed;   
 
-      @Column()
-      description: string;
+    @Column()
+    description: string;
 
-      @Column()
-      image: string;
-      
-      @ManyToOne( () => User ) /** con esto le digo que debe usar el campo email como referencia */
-      @JoinColumn({ name: 'userEmail', referencedColumnName: 'email', })
-      user: User;
-  
-      @Column()
-      userEmail: string;  
-      
+    @Column()
+    image: string;
+    
+    @ManyToOne(() => User) // Relación ManyToOne con User
+    @JoinColumn({ name: 'userEmail', referencedColumnName: 'email' })
+    user: User;
 
+    @Column()
+    userEmail: string;  
 
+    @OneToMany(() => Publishing, publishing => publishing.pet, { cascade: true }) // Relación OneToMany con Publishing, con operaciones en cascada
+    publishings: Publishing[];
 }
-
-
