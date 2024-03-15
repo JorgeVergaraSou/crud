@@ -6,7 +6,7 @@ import { Publishing } from "../../publishings/entities/publishing.entity";
 
 
 @Entity()
-export class Pet {
+export class PetEntity {
 
     @PrimaryGeneratedColumn()
     idPet: number;
@@ -39,6 +39,14 @@ export class Pet {
     @Column()
     userEmail: string;  
 
-    @OneToMany(() => Publishing, publishing => publishing.pet, { cascade: true }) // Relación OneToMany con Publishing, con operaciones en cascada
+    @OneToMany( () => Publishing , (publishing) => publishing.pets )
     publishings: Publishing[];
+
+    /**
+     *     @OneToMany( () => Cat , (cat) => cat.breed )
+    cats: Cat[];
+     */
+
+  //  @OneToMany(() => Publishing, publishing => publishing.pets, { cascade: true }) // Relación OneToMany con Publishing, con operaciones en cascada
+   // publishings: Publishing[];
 }

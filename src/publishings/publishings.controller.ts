@@ -2,14 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PublishingsService } from './publishings.service';
 import { CreatePublishingDto } from './dto/create-publishing.dto';
 import { UpdatePublishingDto } from './dto/update-publishing.dto';
+import { UserActiveInterface } from '../common/interfaces/user-active.interface';
+import { ActiveUser } from '../common/decorators/active-user.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { Role } from 'src/common/enums/role.enum';
 
+@Auth(Role.USER)  
 @Controller('publishings')
 export class PublishingsController {
   constructor(private readonly publishingsService: PublishingsService) {}
 
   @Post()
-  create(@Body() createPublishingDto: CreatePublishingDto) {
-    return this.publishingsService.create(createPublishingDto);
+  create(@Body() createPublishingDto: CreatePublishingDto, @ActiveUser() user: UserActiveInterface) {
+    return this.publishingsService.create(createPublishingDto, user);
   }
 
   @Get()
