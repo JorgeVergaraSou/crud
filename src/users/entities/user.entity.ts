@@ -1,7 +1,7 @@
 import { Publishing } from "../../publishings/entities/publishing.entity";
 import { Role } from "../../common/enums/role.enum";
 import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Pet } from "src/pets/entities/pet.entity";
+import { Pets } from "src/pets/entities/pet.entity";
 
 /** esta entidad es como se va comportar este usuario en la bd, que propiedades y valores va tener */
 @Entity()
@@ -30,9 +30,9 @@ export class User {
     @OneToMany(() => Publishing, publishing => publishing.user, { cascade: true }) // Relación OneToMany con Publishing, con operaciones en cascada
     publishings: Publishing[]; */
 
-    @OneToMany(() => Pet, pet => pet.user)
-    pets: Pet[];
+    @OneToMany(() => Pets, pet => pet.user)
+    pet: Pets[];
 
-    @OneToMany(() => Publishing, publishing => publishing.users)
+    @OneToMany(() => Publishing, publishing => publishing.idPublish)
     publishings: Publishing[];
 }

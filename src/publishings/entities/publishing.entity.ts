@@ -1,5 +1,5 @@
 import { User } from "../../users/entities/user.entity";
-import { PetEntity } from "../../pets/entities/pet.entity";
+import { Pets } from "../../pets/entities/pet.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
 import { tipoPublicacionEnum } from "../../common/enums/tipoPublicacion.enum";
 
@@ -21,15 +21,24 @@ export class Publishing {
     fechaPublicacion: Date;
 
     /* el many-to-one recibe una funcion de flecha */
-    @ManyToOne(() => PetEntity, (pets) => pets.idPet, {
-        // cascade: true,
-        eager: true, // para que traiga las raza al hacer un findOne
+    @ManyToOne(() => Pets, (pets) => pets.idPet, {
+        eager: true, 
     })
-    pets: PetEntity; // se le pasa toda la instancia del Breed
+    pet: Pets; 
 
-    @ManyToOne(() => User) /** con esto le digo que debe usar el campo email como referencia */
-    @JoinColumn({ name: 'userEmail', referencedColumnName: 'email', })
+    @ManyToOne(() => User, (users) => users.id, {
+        eager: true, 
+    })
     user: User;
+
+    /** con esto le digo que debe usar el campo email como referencia */
+    /*
+    @ManyToOne(() => User) 
+    @JoinColumn({ name: 'userEmail', referencedColumnName: 'email', })
+    users: User;
+*/
+
+
 
     @Column()
     userEmail: string;

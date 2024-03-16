@@ -17,7 +17,7 @@ export class PublishingsService {
   
     try {
       const createPublishing = await this.publishRepository.save(createPublishingDto);        
-      console.log(user.id);
+   
       if (createPublishing){
         return {
           message: 'publicacion creada con exito',

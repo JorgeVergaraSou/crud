@@ -6,7 +6,7 @@ import { Publishing } from "../../publishings/entities/publishing.entity";
 
 
 @Entity()
-export class PetEntity {
+export class Pets {
 
     @PrimaryGeneratedColumn()
     idPet: number;
@@ -39,7 +39,7 @@ export class PetEntity {
     @Column()
     userEmail: string;  
 
-    @OneToMany( () => Publishing , (publishing) => publishing.pets )
+    @OneToMany( () => Publishing , (publishing) => publishing.pet )
     publishings: Publishing[];
 
     /**

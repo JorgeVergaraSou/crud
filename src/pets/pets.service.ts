@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pet } from './entities/pet.entity';
+import { Pets } from './entities/pet.entity';
 import { Repository } from 'typeorm';
 import { Breed } from '../breeds/entities/breed.entity';
 import { UserActiveInterface } from '../common/interfaces/user-active.interface';
@@ -12,8 +12,8 @@ import { Role } from '../common/enums/role.enum';
 export class PetsService {
 
   constructor(
-    @InjectRepository(Pet)
-    private readonly petRepository: Repository <Pet>,
+    @InjectRepository(Pets)
+    private readonly petRepository: Repository <Pets>,
     @InjectRepository(Breed) 
     private readonly breedRepository: Repository<Breed>){}
 
