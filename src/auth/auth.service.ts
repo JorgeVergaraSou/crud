@@ -65,17 +65,15 @@ async register({ password, email, name }: RegisterDto) {
       throw new UnauthorizedException("Invalid password");
     }
 /** el payload indica que informacion va a viajar en el JWT */
-    const payload = {email: user.email, role: user.role}
+    const payload = {email: user.email, role: user.role, idUser: user.idUser}
 
     /** aca se crea el token y se le agrega el dato guardado en "payload" */
     const token = await this.jwtService.signAsync(payload);
-    const userId = user.id;
+ 
     /** ahora retornamos el token y la info que queramos, cada vez que el usuario quiera aceder a una ruta
      * protegida va a tener que enviar el jwt para ser autorizado     */
     return {
       token,
-      email,
-      userId,
     };
   }
   /** FIN LOGIN */
