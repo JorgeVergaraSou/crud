@@ -25,17 +25,23 @@ export class PetsService {
     const insertPet =  await this.petRepository.save({
       ...createPetDto,
       breed: breed,
-      userEmail: user.email
+      userIdFk: user.idUser
     })  
+    
+
     
     if(insertPet){
       return{ message: 'Mascota creada con exito'}
     }else{
-      throw new InternalServerErrorException("Fallo la creación de la mascota");
+      throw new InternalServerErrorException("Fallo la creación de la mascota 1");
     }    
   } catch (error) {
-    throw new InternalServerErrorException("Fallo la creación de la mascota");
+    console.log(user.idUser);
+    console.log(error);
+    throw new InternalServerErrorException("Fallo la creación de la mascota 2");
   }
+
+   
 }
   // ---------------- FIN CREATE ----------
 
@@ -47,7 +53,7 @@ export class PetsService {
         }
     /** si el rol es USER, regresara solo los registros del USUARIO */
         return await this.petRepository.find({
-          where: { userEmail: user.email}
+          where: { userIdFk: user.idUser}
         });
       }
 

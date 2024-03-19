@@ -1,4 +1,4 @@
-import { IsString, MinLength, IsInt, IsPositive, IsOptional, IsEnum } from "class-validator";
+import { IsString, MinLength, IsInt, IsPositive, IsOptional, IsEnum, IsNumber } from "class-validator";
 import { PetEnum } from "../../common/enums/pet.enum";
 
 export class CreatePetDto {
@@ -25,4 +25,8 @@ export class CreatePetDto {
      @IsString()
      @IsOptional()
      image?: string;
+     
+    @IsNumber()
+    @IsOptional()
+     postIdFk: number;
 }

@@ -17,21 +17,21 @@ export class PostsService {
 
       const createPosting = await this.postsRepository.save( {
         ...createPostDto,
-        user_id: user.idUser,
+        userIdFk: user.idUser,
       } );        
-   console.log(user.idUser);
-   console.log(user.email);
-   console.log(user.role);
+
       if (createPosting){
         return {
           message: 'publicacion creada con exito',
           post: createPosting, // Puedes devolver el objeto insertado si lo necesitas
+          userIdFk: user.idUser,
         };
       }else{
         throw new InternalServerErrorException("Fallo la creación de publicacion 1");
       }
       
     } catch (error) {
+           
       throw new InternalServerErrorException("Fallo la creación de la publicacion 2");
     }
   }

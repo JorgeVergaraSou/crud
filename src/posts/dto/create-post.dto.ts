@@ -1,11 +1,11 @@
 import { IsDate, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
-import { tipoPublicacionEnum } from "../../common/enums/tipoPublicacion.enum";
+import { typePostEnum } from "../../common/enums/typePost";
 
 export class CreatePostDto {    
     
-    @IsEnum(tipoPublicacionEnum) // Valida que el valor sea uno de los miembros del enum
+    @IsEnum(typePostEnum) // Valida que el valor sea uno de los miembros del enum
     @IsOptional()
-    typePost: tipoPublicacionEnum;
+    typePost: typePostEnum;
 
     @IsString()
     title: string;
