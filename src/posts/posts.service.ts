@@ -5,6 +5,7 @@ import { Posts } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { UserActiveInterface } from 'src/common/interfaces/user-active.interface';
+import { Role } from '../common/enums/role.enum';
 
 @Injectable()
 export class PostsService {
@@ -25,20 +26,30 @@ export class PostsService {
           message: 'publicacion creada con exito',
           post: createPosting, // Puedes devolver el objeto insertado si lo necesitas
           userIdFk: user.idUser,
+          idPost: createPosting.idPost,
         };
       }else{
         throw new InternalServerErrorException("Fallo la creación de publicacion 1");
       }
       
-    } catch (error) {
-           
+    } catch (error) {           
       throw new InternalServerErrorException("Fallo la creación de la publicacion 2");
     }
   }
 
-  findAll() {
-    return `This action returns all posts`;
-  }
+  /** --------------- INICIO FINDALL ---------------------- */
+  async findAll(user: UserActiveInterface) {
+    /** si el rol es ADMIN, regresara todos los registros */
+        if (user.role === Role.ADMIN){
+          return await this.postsRepository.find();
+        }
+    /** si el rol es USER, regresara solo los registros del USUARIO */
+        return await this.postsRepository.find({
+          where: { userIdFk: user.idUser}
+        });
+      }
+
+    /** --------------- FIN FINDALL ---------------------- */  
 
   findOne(id: number) {
     return `This action returns a #${id} post`;
@@ -49,6 +60,10 @@ export class PostsService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} post`;
+    return this.postsRepository.softDelete(id);
+  }
+
+  restore(id: number) {
+    return this.postsRepository.restore(id);
   }
 }

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CatsModule } from './cats/cats.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BreedsModule } from './breeds/breeds.module';
 import { UsersModule } from './users/users.module';
@@ -20,7 +19,7 @@ import { PostsModule } from './posts/posts.module';
       autoLoadEntities: true, // CARGA LAS ENTITYS DE FORMA AUTOMATICA PARA NO HACERLO MANUAL
       synchronize: true, // TODO CAMBIO QUE SE GENERE ACA, SE SINCRONIZA CON LA "BD"
     }),    
-    CatsModule, BreedsModule, UsersModule, AuthModule, PetsModule, PostsModule],
+    BreedsModule, UsersModule, AuthModule, PetsModule, PostsModule],
   controllers: [],
   providers: [],
 })

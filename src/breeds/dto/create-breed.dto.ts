@@ -5,5 +5,5 @@ export class CreateBreedDto {
 
     @Column()
     @MinLength(3)
-    name: string
+    nameBreed: string
 }
