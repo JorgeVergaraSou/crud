@@ -27,20 +27,15 @@ export class PetsService {
       breed: breed,
       userIdFk: user.idUser
     })  
-    
 
-    
     if(insertPet){
       return{ message: 'Mascota creada con exito'}
     }else{
       throw new InternalServerErrorException("Fallo la creación de la mascota 1");
     }    
   } catch (error) {
-    console.log(user.idUser);
-    console.log(error);
     throw new InternalServerErrorException("Fallo la creación de la mascota 2");
   }
-
    
 }
   // ---------------- FIN CREATE ----------
@@ -77,7 +72,7 @@ export class PetsService {
 
   private async validateBreed(breed: string){
     /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
-    const breedEntity = await this.breedRepository.findOneBy({ name: breed });
+    const breedEntity = await this.breedRepository.findOneBy({ nameBreed: breed });
     /* si no existe va lanzar un error y si existe va a guardar el gato co la raza en contrada */
     if (!breedEntity) {
       throw new BadRequestException('Breed not found');

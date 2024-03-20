@@ -1,4 +1,3 @@
-
 import { Column, Entity, OneToMany } from "typeorm";
 
 @Entity()
@@ -8,7 +7,7 @@ export class Breed {
     idBreed: number;
 
     @Column({ length: 50})
-    name: string;
+    nameBreed: string;
 
 }
 /* se crea la entity para poder hacer la relacion a cats, de parte del breed es one-to-many */

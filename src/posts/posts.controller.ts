@@ -18,8 +18,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@ActiveUser() user: UserActiveInterface) {
+    return this.postsService.findAll(user);
   }
 
   @Get(':id')
@@ -33,7 +33,13 @@ export class PostsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.postsService.remove(id);
   }
+
+  @Get('/restore/:id')
+  restore(@Param('id') id: number) {
+    return this.postsService.restore(id);
+  }
+
 }
