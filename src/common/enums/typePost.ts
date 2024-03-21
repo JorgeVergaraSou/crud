@@ -1,5 +1,5 @@
 export enum typePostEnum {
-    BUSCO = 'busco mascota perdida',
-    OFREZCO = 'ofrezco mascota en adopcion',
-    ADOPTO = 'busco adoptar mascota'
+    BUSCO = 'Busco mascota perdida',
+    OFREZCO = 'Ofrezco mascota en adopcion',
+    ADOPTO = 'Quiero adoptar mascota'
   }

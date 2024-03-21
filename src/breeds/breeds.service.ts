@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateBreedDto } from './dto/create-breed.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Breed } from './entities/breed.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class BreedsService {
@@ -19,17 +19,22 @@ export class BreedsService {
   async findAll() {
     return await this.breedRepository.find();
   }
-/*
+
   async findOne(id: number) {
-    return `This action returns a #${id} breed`;
+    const findById: FindOneOptions<Breed> = {
+      where: { idBreed: id }
+    };
+    return this.breedRepository.findOne(findById);
   }
-
-  async update(id: number, updateBreedDto: UpdateBreedDto) {
-    return `This action updates a #${id} breed`;
-  }
-
   remove(id: number) {
-    return `This action removes a #${id} breed`;
+    return this.breedRepository.softDelete(id);
   }
-  */
+
+  restore(id: number) {
+    return this.breedRepository.restore(id);
+  }
+
+ async  update(id:number, updateBreed: CreateBreedDto){
+return await this.breedRepository.update(id, updateBreed);
+  }
 }
