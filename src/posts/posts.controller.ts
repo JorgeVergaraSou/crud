@@ -21,7 +21,7 @@ export class PostsController {
   findAll(@ActiveUser() user: UserActiveInterface) {
     return this.postsService.findAll(user);
   }
-
+/*
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(+id);
@@ -31,7 +31,7 @@ export class PostsController {
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postsService.update(+id, updatePostDto);
   }
-
+*/
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.postsService.remove(id);
