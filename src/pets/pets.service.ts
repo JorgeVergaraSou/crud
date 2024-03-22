@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { Breed } from '../breeds/entities/breed.entity';
 import { UserActiveInterface } from '../common/interfaces/user-active.interface';
 import { Role } from '../common/enums/role.enum';
+import { BreedsService } from 'src/breeds/breeds.service';
 
 @Injectable()
 export class PetsService {
@@ -15,13 +16,14 @@ export class PetsService {
     @InjectRepository(Pets)
     private readonly petRepository: Repository <Pets>,
     @InjectRepository(Breed) 
-    private readonly breedRepository: Repository<Breed>){}
+    private readonly breedRepository: Repository<Breed>,
+    private readonly breedService: BreedsService){}
 
  // ------------- INICIO CREATE -----------
  async create(createPetDto: CreatePetDto, user: UserActiveInterface) {
 
   try {
-    const breed = await this.validateBreed(createPetDto.breed)
+    const breed = await this.breedService.validateBreed(createPetDto.breed)
     const insertPet =  await this.petRepository.save({
       ...createPetDto,
       breed: breed,
@@ -70,13 +72,5 @@ export class PetsService {
     return this.petRepository.restore(id);
   }
 
-  private async validateBreed(breed: string){
-    /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
-    const breedEntity = await this.breedRepository.findOneBy({ nameBreed: breed });
-    /* si no existe va lanzar un error y si existe va a guardar el gato co la raza en contrada */
-    if (!breedEntity) {
-      throw new BadRequestException('Breed not found');
-    }
-    return breedEntity
-  }
+  
 }

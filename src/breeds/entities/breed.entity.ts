@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, DeleteDateColumn, Entity, OneToMany } from "typeorm";
 
 @Entity()
 export class Breed {
@@ -8,6 +8,9 @@ export class Breed {
 
     @Column({ length: 50})
     nameBreed: string;
+
+    @DeleteDateColumn()
+    deletedAt?: Date;
 
 }
 /* se crea la entity para poder hacer la relacion a cats, de parte del breed es one-to-many */

@@ -19,8 +19,7 @@ export class Pets {
     @Column()
     age: number;
 
-    @ManyToOne(() => Breed, { eager: true }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
-    breed: Breed;   
+ 
 
     @Column()
     description: string;
@@ -28,6 +27,8 @@ export class Pets {
     @Column()
     image: string;
 
+    @DeleteDateColumn()
+    deletedAt: Date;
     /*
     @ManyToOne(() => User) // Relación ManyToOne con User
     @JoinColumn({ name: 'userEmail', referencedColumnName: 'email' })
@@ -50,7 +51,6 @@ export class Pets {
     @Column()
     postIdFk: number;
 
-    @DeleteDateColumn()
-    deletedAt: Date;
-
+    @ManyToOne(() => Breed, { eager: true }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
+    breed: Breed;  
 }

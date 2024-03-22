@@ -36,6 +36,12 @@ export class BreedsController {
     return this.breedsService.restore(id);
   }
 
+  @Auth(Role.ADMIN)
+  @Get('/listDelete/')
+  findSoftDelete() {
+    return this.breedsService.findSoftDelete();
+  }
+
   @Auth(Role.USER)
   @Get()
   findAll() {
