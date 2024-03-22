@@ -37,7 +37,7 @@ export class BreedsController {
   }
 
   @Auth(Role.ADMIN)
-  @Get('/listDelete/')
+  @Get('/listDelete')
   findSoftDelete() {
     return this.breedsService.findSoftDelete();
   }

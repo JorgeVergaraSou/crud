@@ -76,7 +76,7 @@ async register({ password, email, name }: RegisterDto) {
       token,
     };
   }
-  /** FIN LOGIN */
+  /** ===================== FIN LOGIN ===================== */
 
   async profile({email, role}: {email: string, role: string}) {
 

@@ -56,12 +56,24 @@ export class PetsService {
 
     /** --------------- FIN FINDALL ---------------------- */    
 
-  findOne(id: number) {
-    return `This action returns a #${id} pet`;
+  async findOne(id: number) {
+    return await this.petRepository.findOne({ where: { idPet: id } });
   }
 
-  update(id: number, updatePetDto: UpdatePetDto) {
-    return `This action updates a #${id} pet`;
+ async update(id: number, updatePetDto: UpdatePetDto) {
+
+    try {
+      const updatePet = await this.petRepository.update(id, updatePetDto);
+      if (updatePet){
+        return{ message: 'Mascota actualizada con exito'};
+      }else{
+        return{ message: 'Ha ocurrido un error al intentar actualizar la mascota'};
+      }
+      
+    } catch (error) {
+      throw new InternalServerErrorException("Fallo la consulta s la BD");
+    }
+
   }
 
   remove(id: number) {
