@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateBreedDto } from './dto/create-breed.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Breed } from './entities/breed.entity';
@@ -26,24 +26,22 @@ export class BreedsService {
     return await this.breedRepository.find();
   }
 
-  async findSoftDelete() {
-    const breedsWithNotNullDate = await this.breedRepository
-    .createQueryBuilder('breed')
-    .where('breed.deletedAt IS NOT NULL')
-    .getMany();
-
-        console.log(breedsWithNotNullDate);
-        
-        return breedsWithNotNullDate;
+  async softDelete(id: number) {
+    const breed = await this.findOne( id ); // Corregir la llamada a findOne
+    if (!breed) {
+      throw new NotFoundException('Breed not found');
+    }
+    breed.isActive = 0; // Desactivar (soft-delete)
+    await this.breedRepository.save(breed);
   }
 
   /** BUSCA BREED POR ID */
   async findOne(id: number) {
-    const findById: FindOneOptions<Breed> = {
-      where: { idBreed: id }
-    };
-    return await this.breedRepository.findOne(findById);
+
+
+    return await this.breedRepository.findOne({ where: { idBreed: id } });
   }
+  
   /** BUSCA BREED POR NAME */
   async findOneByName(breed: string) {
     const findByName: FindOneOptions<Breed> = {

@@ -19,7 +19,7 @@ export class PetsService {
     private readonly breedRepository: Repository<Breed>,
     private readonly breedService: BreedsService){}
 
- // ------------- INICIO CREATE -----------
+ /** +++++++++++++++ CREATE INICIO +++++++++++++++ */
  async create(createPetDto: CreatePetDto, user: UserActiveInterface) {
 
   try {
@@ -40,13 +40,19 @@ export class PetsService {
   }
    
 }
-  // ---------------- FIN CREATE ----------
+   /** +++++++++++++++ CREATE FIN +++++++++++++++ */
 
   /** --------------- INICIO FINDALL ---------------------- */
   async findAll(user: UserActiveInterface) {
     /** si el rol es ADMIN, regresara todos los registros */
         if (user.role === Role.ADMIN){
-          return await this.petRepository.find();
+
+          const petsFull = await this.petRepository
+          .createQueryBuilder()
+          .select()
+          .withDeleted() // Incluir registros eliminados lógicamente
+          .getMany();
+          return petsFull;
         }
     /** si el rol es USER, regresara solo los registros del USUARIO */
         return await this.petRepository.find({
@@ -60,22 +66,22 @@ export class PetsService {
     return await this.petRepository.findOne({ where: { idPet: id } });
   }
 
+ /** +++++++++++++++ UPDATE INICIO +++++++++++++++ */
  async update(id: number, updatePetDto: UpdatePetDto) {
-
     try {
       const updatePet = await this.petRepository.update(id, updatePetDto);
       if (updatePet){
         return{ message: 'Mascota actualizada con exito'};
       }else{
         return{ message: 'Ha ocurrido un error al intentar actualizar la mascota'};
-      }
-      
+      }      
     } catch (error) {
       throw new InternalServerErrorException("Fallo la consulta s la BD");
     }
-
   }
+ /** +++++++++++++++ UPDATE FIN +++++++++++++++ */
 
+  /** +++++++++++++++ REMOVE AND RESTORE INICIO +++++++++++++++ */
   remove(id: number) {
     return this.petRepository.softDelete(id);
   }
@@ -83,6 +89,5 @@ export class PetsService {
   restore(id: number) {
     return this.petRepository.restore(id);
   }
-
-  
+ /** +++++++++++++++ REMOVE AND RESTORE FIN +++++++++++++++ */
 }

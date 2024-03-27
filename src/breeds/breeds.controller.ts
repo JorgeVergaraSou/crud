@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { BreedsService } from './breeds.service';
 import { CreateBreedDto } from './dto/create-breed.dto';
 
@@ -27,8 +27,15 @@ export class BreedsController {
   }
   @Auth(Role.ADMIN)
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.breedsService.remove(id);
+  softDelete(@Param('id') id: number) {
+    try {
+      this.breedsService.softDelete(id);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Breed not found');
+      }
+      throw error;
+    }
   }
   @Auth(Role.ADMIN)
   @Get('/restore/:id')
@@ -36,15 +43,11 @@ export class BreedsController {
     return this.breedsService.restore(id);
   }
 
-  @Auth(Role.ADMIN)
-  @Get('/listDelete')
-  findSoftDelete() {
-    return this.breedsService.findSoftDelete();
-  }
 
   @Auth(Role.USER)
-  @Get()
+  @Get('/list')
   findAll() {
     return this.breedsService.findAll();
   }
+
 }

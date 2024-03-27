@@ -9,8 +9,11 @@ export class Breed {
     @Column({ length: 50})
     nameBreed: string;
 
-    @DeleteDateColumn()
-    deletedAt?: Date;
+ /*   @DeleteDateColumn()
+    deletedAt?: Date;*/
+
+    @Column({ default: 1 })
+    isActive: number;
 
 }
 /* se crea la entity para poder hacer la relacion a cats, de parte del breed es one-to-many */
