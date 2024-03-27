@@ -29,8 +29,7 @@ export class BreedsService {
   async findSoftDelete() {
     const breedsWithNotNullDate = await this.breedRepository
     .createQueryBuilder('breed')
-    .where('breed.deletedAt IS NOT NULL')
-    .getMany();
+    .where('breed.deletedAt = NULL')
 
         console.log(breedsWithNotNullDate);
         
