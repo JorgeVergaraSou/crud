@@ -41,12 +41,22 @@ export class PostsService {
   async findAll(user: UserActiveInterface) {
     /** si el rol es ADMIN, regresara todos los registros */
     if (user.role === Role.ADMIN) {
-      return await this.postsRepository.find();
+      const postWithDelete = await this.postsRepository
+
+      .createQueryBuilder()
+      .select()
+      .withDeleted() // Incluir registros eliminados lógicamente
+      .getMany();
+
+      return postWithDelete;
+    } /** si el rol es USER, regresara solo los registros del USUARIO */
+    else if(user.role === Role.USER){
+      return await this.postsRepository.find({
+        where: { userIdFk: user.idUser }
+      });
     }
-    /** si el rol es USER, regresara solo los registros del USUARIO */
-    return await this.postsRepository.find({
-      where: { userIdFk: user.idUser }
-    });
+    return await this.postsRepository.find(); 
+
   }
 /*
   async findLostPet(user: UserActiveInterface){
