@@ -37,15 +37,9 @@ export class BreedsController {
       throw error;
     }
   }
-  @Auth(Role.ADMIN)
-  @Get('/restore/:id')
-  restore(@Param('id') id: number) {
-    return this.breedsService.restore(id);
-  }
-
 
   @Auth(Role.USER)
-  @Get('/list')
+  @Get()
   findAll() {
     return this.breedsService.findAll();
   }

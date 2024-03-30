@@ -23,7 +23,7 @@ export class BreedsService {
   }
 
   async findAll() {
-    return await this.breedRepository.find();
+    return await this.breedRepository.find({ where: { isActive: 1 }  });
   }
 
   async softDelete(id: number) {
@@ -31,15 +31,19 @@ export class BreedsService {
     if (!breed) {
       throw new NotFoundException('Breed not found');
     }
-    breed.isActive = 0; // Desactivar (soft-delete)
+
+    if (breed.isActive == 1){
+      breed.isActive = 0; // Desactivar (soft-delete)
+    }
+    else {
+      breed.isActive = 1;
+    }   
     await this.breedRepository.save(breed);
   }
 
   /** BUSCA BREED POR ID */
   async findOne(id: number) {
-
-
-    return await this.breedRepository.findOne({ where: { idBreed: id } });
+    return await this.breedRepository.findOne( { where: { idBreed: id } } );
   }
   
   /** BUSCA BREED POR NAME */
@@ -49,14 +53,6 @@ export class BreedsService {
     };
     return await this.breedRepository.findOne(findByName);
   }
-  /** ES UN DELETE LOGICO */
-  async remove(id: number) {
-    return await this.breedRepository.softDelete(id);
-  }
-
-  async restore(id: number) {
-    return await this.breedRepository.restore(id);
-  }
 
   async update(id: number, updateBreed: CreateBreedDto) {
     return await this.breedRepository.update(id, updateBreed);
@@ -65,7 +61,7 @@ export class BreedsService {
   async validateBreed(breed: string) {
     /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
     const breedEntity = await this.breedRepository.findOneBy({ nameBreed: breed });
-    /* si no existe va lanzar un error y si existe va a guardar el gato co la raza en contrada */
+    /* si no existe va lanzar un error y si existe va a guardar la mascota con la raza encontrada */
     if (!breedEntity) {
       throw new BadRequestException('Breed not found');
     }
