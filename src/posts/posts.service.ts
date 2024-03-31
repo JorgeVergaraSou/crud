@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Posts } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { UserActiveInterface } from 'src/common/interfaces/user-active.interface';
+import { UserActiveInterface } from '../common/interfaces/user-active.interface';
 import { Role } from '../common/enums/role.enum';
 
 @Injectable()
