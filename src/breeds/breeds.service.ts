@@ -92,12 +92,16 @@ export class BreedsService {
   }
   /** */
   async validateBreed(breed: string) {
-    /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
+    try {
+       /* cuando vayamos a crear una mascota, primero va a buscar el nombre de la raza  */
     const breedEntity = await this.breedRepository.findOneBy({ nameBreed: breed });
     /* si no existe va lanzar un error y si existe va a guardar la mascota con la raza encontrada */
     if (!breedEntity) {
       throw new BadRequestException('Breed not found');
     }
     return breedEntity
+    } catch (error) {
+      throw new InternalServerErrorException(error, 'QUERY FAILED WHEN TRYING VALIDATE THE BREED');
+    }   
   }
 }

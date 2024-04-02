@@ -32,10 +32,7 @@ export class Pets {
 
     @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
     softDeleteDate: Date;
-/*
-    @DeleteDateColumn()
-    deletedAt: Date;
-*/
+
     @ManyToOne(() => User, (user) => user.pet)
     @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
     user: User;

@@ -7,11 +7,12 @@ import { UserActiveInterface } from '../common/interfaces/user-active.interface'
 import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../common/enums/role.enum';
 
-@Auth(Role.USER)  
+
 @Controller('pets')
 export class PetsController {
-  constructor(private readonly petsService: PetsService) {}
+  constructor(private readonly petsService: PetsService) { }
 
+  @Auth(Role.USER)
   @Post()
   create(@Body() createPetDto: CreatePetDto, @ActiveUser() user: UserActiveInterface) {
     return this.petsService.create(createPetDto, user);
@@ -27,18 +28,17 @@ export class PetsController {
     return this.petsService.findOne(id);
   }
 
+  @Auth(Role.USER)
   @Patch(':id')
   update(@Param('id') id: number, @Body() updatePetDto: UpdatePetDto) {
     return this.petsService.update(id, updatePetDto);
   }
 
+  @Auth(Role.USER)
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.petsService.remove(id);
+  softDelete(@Param('id') id: number) {
+    return this.petsService.softDelete(id);
   }
 
-  @Get('/restore/:id')
-  restore(@Param('id') id: number) {
-    return this.petsService.restore(id);
-  }
+
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,8 +19,8 @@ export class PetsService {
     private readonly breedRepository: Repository<Breed>,
     private readonly breedService: BreedsService) { }
 
- /** +++++++++++++++ CREATE INICIO +++++++++++++++ */
- async create(createPetDto: CreatePetDto, user: UserActiveInterface) {
+  /** +++++++++++++++ CREATE INICIO +++++++++++++++ */
+  async create(createPetDto: CreatePetDto, user: UserActiveInterface) {
 
     try {
       const breed = await this.breedService.validateBreed(createPetDto.breed)
@@ -30,64 +30,94 @@ export class PetsService {
         userIdFk: user.idUser
       })
 
-    if(insertPet){
-      return{ message: 'Mascota creada con exito'}
-    }else{
-      throw new InternalServerErrorException("Fallo la creación de la mascota 1");
-    }    
-  } catch (error) {
-    throw new InternalServerErrorException("Fallo la creación de la mascota 2");
+      if (insertPet) {
+        return { message: 'successfully created pet' }
+      } else {
+        throw new InternalServerErrorException("Error when creating the pet");
+      }
+    } catch (error) {
+      throw new InternalServerErrorException("Error when calling the database");
+    }
+
   }
-   
-}
-   /** +++++++++++++++ CREATE FIN +++++++++++++++ */
+  /** +++++++++++++++ CREATE FIN +++++++++++++++ */
 
   /** --------------- INICIO FINDALL ---------------------- */
   async findAll(user: UserActiveInterface) {
-    /** si el rol es ADMIN, regresara todos los registros */
+
+    try {
+      if (user && user.role === Role.ADMIN) {
+        return await this.breedRepository.find();
+      }
+      else if (user && user.role === Role.USER) {
+        return await this.petRepository.find({
+          where: { userIdFk: user.idUser }
+        });
+      }
+      return await this.breedRepository.find({ where: { isActive: 1 } });
+    } catch (error) {
+      throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
+    }
+    /*
+    try {
+        
         if (user.role === Role.ADMIN){
 
-          const petsFull = await this.petRepository
-          .createQueryBuilder()
-          .select()
-          .withDeleted() // Incluir registros eliminados lógicamente
-          .getMany();
-          return petsFull;
+          return await this.petRepository.find();
         }
-    /** si el rol es USER, regresara solo los registros del USUARIO */
+    
     return await this.petRepository.find({
       where: { userIdFk: user.idUser }
     });
+    } catch (error) {
+      throw new InternalServerErrorException("DB query failed");
+    }
+    */
   }
 
   /** --------------- FIN FINDALL ---------------------- */
 
   async findOne(id: number) {
-    return await this.petRepository.findOne({ where: { idPet: id } });
-  }
-
- /** +++++++++++++++ UPDATE INICIO +++++++++++++++ */
- async update(id: number, updatePetDto: UpdatePetDto) {
     try {
-      const updatePet = await this.petRepository.update(id, updatePetDto);
-      if (updatePet){
-        return{ message: 'Mascota actualizada con exito'};
-      }else{
-        return{ message: 'Ha ocurrido un error al intentar actualizar la mascota'};
-      }      
+      return await this.petRepository.findOne({ where: { idPet: id } });
     } catch (error) {
-      throw new InternalServerErrorException("Fallo la consulta s la BD");
+      throw new InternalServerErrorException("DB query failed");
     }
   }
- /** +++++++++++++++ UPDATE FIN +++++++++++++++ */
+
+  /** +++++++++++++++ UPDATE INICIO +++++++++++++++ */
+  async update(id: number, updatePetDto: UpdatePetDto) {
+    try {
+      const updatePet = await this.petRepository.update(id, updatePetDto);
+      if (updatePet) {
+        return { message: 'Pet updated successfully' };
+      } else {
+        return { message: 'Ha ocurrido un error al intentar actualizar la mascota' };
+      }
+    } catch (error) {
+      throw new InternalServerErrorException("DB query failed");
+    }
+  }
+  /** +++++++++++++++ UPDATE FIN +++++++++++++++ */
 
   /** +++++++++++++++ REMOVE AND RESTORE INICIO +++++++++++++++ */
-  remove(id: number) {
-    return this.petRepository.softDelete(id);
-  }
+  async softDelete(id: number) {
+    try {
+      const petActive = await this.findOne(id);
+      if (!petActive) {
+        throw new NotFoundException('Pet not found');
+      }
 
-  restore(id: number) {
-    return this.petRepository.restore(id);
+      if (petActive.isActive == 1) {
+        petActive.isActive = 0;
+      }
+      else {
+        petActive.isActive = 1;
+      }
+      await this.petRepository.save(petActive);
+    } catch (error) {
+      throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING TO DELETE THE PET');
+    }
   }
- /** +++++++++++++++ REMOVE AND RESTORE FIN +++++++++++++++ */
+  /** +++++++++++++++ REMOVE AND RESTORE FIN +++++++++++++++ */
 }
