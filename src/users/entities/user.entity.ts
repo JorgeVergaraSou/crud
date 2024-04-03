@@ -24,9 +24,15 @@ export class User {
     @Column({ type: 'enum', default: Role.USER, enum: Role })
     role: Role;
 
+    @Column({ default: 1})
+    isActive: number;
+
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    softDeleteDate: Date;
+/*
     @DeleteDateColumn() // SE USA PARA HACER ELIMINACIONES LOGICAS
     deleteAt: Date;
-
+*/
     @OneToMany(() => Pets, pet => pet.user)
     pet: Pets[];
 

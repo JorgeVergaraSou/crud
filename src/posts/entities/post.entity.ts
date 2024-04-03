@@ -20,9 +20,16 @@ export class Posts {
     @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
     postDate: Date;
 
+    @Column({ default: 1})
+    isActive: number;
+
+    
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    softDeleteDate: Date;
+/*
     @DeleteDateColumn()
     deleteAt: Date;
-
+*/
     @ManyToOne(() => User, (user) => user.posting)
     @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
     user: User;

@@ -4,6 +4,8 @@ import { CreateBreedDto } from './dto/create-breed.dto';
 
 import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from "../common/enums/role.enum";
+import { ActiveUser } from 'src/common/decorators/active-user.decorator';
+import { UserActiveInterface } from 'src/common/interfaces/user-active.interface';
 
 
 @Controller('breeds')
@@ -37,17 +39,11 @@ export class BreedsController {
       throw error;
     }
   }
-  @Auth(Role.ADMIN)
-  @Get('/restore/:id')
-  restore(@Param('id') id: number) {
-    return this.breedsService.restore(id);
-  }
 
 
-  @Auth(Role.USER)
-  @Get('/list')
-  findAll() {
-    return this.breedsService.findAll();
+  @Get()
+  findAll(@ActiveUser() user: UserActiveInterface) {
+    return this.breedsService.findAll(user);
   }
 
 }

@@ -1,10 +1,10 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Posts } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { UserActiveInterface } from 'src/common/interfaces/user-active.interface';
+import { UserActiveInterface } from '../common/interfaces/user-active.interface';
 import { Role } from '../common/enums/role.enum';
 
 @Injectable()
@@ -40,22 +40,19 @@ export class PostsService {
   /** --------------- INICIO FINDALL ---------------------- */
   async findAll(user: UserActiveInterface) {
     /** si el rol es ADMIN, regresara todos los registros */
-    if (user.role === Role.ADMIN) {
-      const postWithDelete = await this.postsRepository
-
-      .createQueryBuilder()
-      .select()
-      .withDeleted() // Incluir registros eliminados lógicamente
-      .getMany();
-
-      return postWithDelete;
-    } /** si el rol es USER, regresara solo los registros del USUARIO */
-    else if(user.role === Role.USER){
-      return await this.postsRepository.find({
-        where: { userIdFk: user.idUser }
-      });
+    try {
+      if (user && user.role === Role.ADMIN) {
+        return await this.postsRepository.find();
+      }
+      else if (user && user.role === Role.USER) {
+        return await this.postsRepository.find({
+          where: { userIdFk: user.idUser }
+        });
+      }
+      return await this.postsRepository.find({ where: { isActive: 1 } });
+    } catch (error) {
+      throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
     }
-    return await this.postsRepository.find(); 
 
   }
 /*
@@ -64,20 +61,35 @@ export class PostsService {
   }
 */
   /** --------------- FIN FINDALL ---------------------- */
-  /*
-    findOne(id: number) {
-      return `This action returns a #${id} post`;
-    }
   
+  async findOne(id: number) {
+    try {
+      return await this.postsRepository.findOne({ where: { idPost: id } });
+    } catch (error) {
+      throw new InternalServerErrorException("DB query failed");
+    }
+  }
+  /*
     update(id: number, updatePostDto: UpdatePostDto) {
       return `This action updates a #${id} post`;
     }
   */
-  remove(id: number) {
-    return this.postsRepository.softDelete(id);
-  }
-
-  restore(id: number) {
-    return this.postsRepository.restore(id);
-  }
+    async softDelete(id: number) {
+      try {
+        const posting = await this.findOne(id);
+        if (!posting) {
+          throw new NotFoundException('Post not found');
+        }
+  
+        if (posting.isActive == 1) {
+          posting.isActive = 0;
+        }
+        else {
+          posting.isActive = 1;
+        }
+        await this.postsRepository.save(posting);
+      } catch (error) {
+        throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING TO DELETE THE POST');
+      }
+    }
 }
