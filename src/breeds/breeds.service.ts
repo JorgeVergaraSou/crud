@@ -37,8 +37,6 @@ export class BreedsService {
 
   /** BUSCA BREED POR ID */
   async findOne(id: number) {
-
-
     return await this.breedRepository.findOne({ where: { idBreed: id } });
   }
   
