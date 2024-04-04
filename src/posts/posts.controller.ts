@@ -36,13 +36,7 @@ export class PostsController {
 */
 @Auth(Role.USER) 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.postsService.remove(id);
+  softDelete(@Param('id') id: number) {
+    return this.postsService.softDelete(id);
   }
-  @Auth(Role.USER) 
-  @Get('/restore/:id')
-  restore(@Param('id') id: number) {
-    return this.postsService.restore(id);
-  }
-
 }
