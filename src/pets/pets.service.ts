@@ -47,14 +47,14 @@ export class PetsService {
 
     try {
       if (user && user.role === Role.ADMIN) {
-        return await this.breedRepository.find();
+        return await this.petRepository.find();
       }
       else if (user && user.role === Role.USER) {
         return await this.petRepository.find({
           where: { userIdFk: user.idUser }
         });
       }
-      return await this.breedRepository.find({ where: { isActive: 1 } });
+      return await this.petRepository.find({ where: { isActive: 1 } });
     } catch (error) {
       throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
     }

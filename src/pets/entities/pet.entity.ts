@@ -47,6 +47,16 @@ export class Pets {
     @Column()
     postIdFk: number;
 
-    @ManyToOne(() => Breed, { eager: true }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
+    @ManyToOne(() => Breed, (breed) => breed.idBreed,
+    {
+         eager: true 
+    }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
     breed: Breed;  
+
+    /**
+     *   @ManyToOne(() => Breed, (breed) => breed.id, {
+    eager: true, // para que traiga las raza al hacer un findOne
+  })
+  breed: Breed;
+     */
 }
