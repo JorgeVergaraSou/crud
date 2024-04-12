@@ -8,16 +8,14 @@ export class CreatePostDto {
     typePost: typePostEnum;
 
     @IsString()
+    @IsOptional()
     title: string;
 
     @IsString()
+    @IsOptional()
     content: string;
 
     @IsDate()
     @IsOptional()
     postDate: Date;
-/*
-    @IsNumber()
-    user_id: number;   
-    */
 }
