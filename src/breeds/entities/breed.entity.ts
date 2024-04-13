@@ -10,21 +10,15 @@ export class Breed {
     @Column({ length: 50})
     nameBreed: string;
 
- /*   @DeleteDateColumn()
-    deletedAt?: Date;*/
-
     @Column({ default: 1 })
     isActive: number;
 
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) 
     softDeleteDate: Date;
     
     @OneToMany(() => Pets, (pet) => pet.breed)
     pets: Pets[];
-    /**
-     *   @OneToMany(() => Cat, (cat) => cat.breed)
-  cats: Cat[];
-     */
+
 }
 /* se crea la entity para poder hacer la relacion a cats, de parte del breed es one-to-many */
 /** EL ONE-TO-MANY SI ESTA EN UNA ENTIDAD NO PUEDE VIVIR SIN EL MANY-TO-ONE EN LA OTRA ENTIDAD 

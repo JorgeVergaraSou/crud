@@ -27,7 +27,7 @@ export class PetsService {
       const insertPet = await this.petRepository.save({
         ...createPetDto,
         breed: breed,
-        userIdFk: user.idUser
+        userIdFk: user.idUser        
       })
 
       if (insertPet) {
@@ -58,21 +58,7 @@ export class PetsService {
     } catch (error) {
       throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
     }
-    /*
-    try {
-        
-        if (user.role === Role.ADMIN){
-
-          return await this.petRepository.find();
-        }
-    
-    return await this.petRepository.find({
-      where: { userIdFk: user.idUser }
-    });
-    } catch (error) {
-      throw new InternalServerErrorException("DB query failed");
-    }
-    */
+ 
   }
 
   /** --------------- FIN FINDALL ---------------------- */

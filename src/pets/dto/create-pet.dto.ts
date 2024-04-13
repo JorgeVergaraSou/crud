@@ -28,5 +28,5 @@ export class CreatePetDto {
      
     @IsNumber()
     @IsOptional()
-     postIdFk: number;
+    idPostFk: number;
 }

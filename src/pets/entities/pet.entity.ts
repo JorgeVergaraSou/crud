@@ -7,56 +7,51 @@ import { Posts } from "src/posts/entities/post.entity";
 @Entity()
 export class Pets {
 
-    @PrimaryGeneratedColumn()
-    idPet: number;
+     @PrimaryGeneratedColumn()
+     idPet: number;
 
-    @Column()
-    namePet: string;
-    
-    @Column({ type: 'enum', enum: PetEnum })
-    pet: PetEnum;
+     @Column()
+     namePet: string;
 
-    @Column()
-    age: number;
+     @Column({ type: 'enum', enum: PetEnum })
+     pet: PetEnum;
 
- 
+     @Column()
+     age: number;
 
-    @Column()
-    description: string;
+     @Column()
+     description: string;
 
-    @Column()
-    image: string;
+     @Column()
+     image: string;
 
-    @Column({ default: 1})
-    isActive: number;
+     @Column({ default: 1 })
+     isActive: number;
 
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
-    softDeleteDate: Date;
+     @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+     softDeleteDate: Date;
 
-    @ManyToOne(() => User, (user) => user.pet)
-    @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
-    user: User;
+     @Column()
+     userIdFk: number;
 
-    @Column()
-    userIdFk: number;
+     @ManyToOne(() => User, (user) => user.pet)
+     @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
+     user: User;
 
-    @ManyToOne(() => Posts, (post) => post.pet)
-    @JoinColumn({ name: 'postIdFk', referencedColumnName: 'idPost', })
-    post: Posts;
 
-    @Column()
-    postIdFk: number;
 
-    @ManyToOne(() => Breed, (breed) => breed.idBreed,
-    {
-         eager: true 
-    }) // Relación ManyToOne con Breed, eager carga la relación automáticamente
-    breed: Breed;  
+     @ManyToOne(() => Posts, (post) => post.idPost)
+     @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost', })
+     post: Posts;
 
-    /**
-     *   @ManyToOne(() => Breed, (breed) => breed.id, {
-    eager: true, // para que traiga las raza al hacer un findOne
-  })
-  breed: Breed;
-     */
+     @Column()
+     idPostFk: number;
+
+     @ManyToOne(() => Breed, (breed) => breed.idBreed,
+          {
+               eager: true
+          })
+     breed: Breed;
+
+
 }

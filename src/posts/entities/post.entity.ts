@@ -17,28 +17,36 @@ export class Posts {
     @Column()
     content: string;
 
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) 
     postDate: Date;
 
     @Column({ default: 1})
     isActive: number;
-
     
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
+    @Column({ default: () => 'CURRENT_TIMESTAMP' }) 
     softDeleteDate: Date;
-/*
-    @DeleteDateColumn()
-    deleteAt: Date;
-*/
+
     @ManyToOne(() => User, (user) => user.posting)
     @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
     user: User;
 
     @Column()
     userIdFk: number;
-
+/*
+    @OneToMany(() => Pets, (pet) => pet.idPet)
+    pets: Pets[];
+    */
+/*
     @OneToMany(() => Pets, pet => pet.post)
     pet: Pets[];
+*/
+    /*
+          @ManyToOne(() => Pets, (pets) => pets.idPet,
+          {
+               eager: true
+          })
+     pets: Pets;
+     */
 
 }
 
