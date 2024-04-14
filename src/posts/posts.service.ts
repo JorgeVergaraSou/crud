@@ -13,76 +13,73 @@ export class PostsService {
     @InjectRepository(Posts) private readonly postsRepository: Repository<Posts>
   ) { }
 
-  async create(createPostDto: CreatePostDto, user: UserActiveInterface) {   
+  async create(createPostDto: CreatePostDto, user: UserActiveInterface) {
     try {
+      // Guarda una nueva publicación en la base de datos, asignando el ID del usuario actual
       const createPosting = await this.postsRepository.save({
         ...createPostDto,
         userIdFk: user.idUser,
       });
 
+      // Verifica si la creación de la publicación fue exitosa
       if (createPosting) {
+        // Si fue exitosa, devuelve un mensaje de éxito junto con la información de la publicación creada
         return {
-          message: 'publicacion creada con exito',
-          post: createPosting, // Puedes devolver el objeto insertado si lo necesitas
-          userIdFk: user.idUser,
-          idPost: createPosting.idPost,
+          message: 'Publicación creada con éxito', // Mensaje de éxito
+          post: createPosting, // Objeto de la publicación creada
+          userIdFk: user.idUser, // ID del usuario que creó la publicación
+          idPost: createPosting.idPost, // ID de la publicación creada
         };
       } else {
-        throw new InternalServerErrorException("Fallo la creación de publicacion 1");
+        // Si la creación de la publicación falla, lanza una excepción de error interno
+        throw new InternalServerErrorException("Fallo la creación de la publicación 1");
       }
     } catch (error) {
-      throw new InternalServerErrorException("Fallo la creación de la publicacion 2");
+      // Si hay algún error durante el proceso, lanza una excepción de error interno
+      throw new InternalServerErrorException("Fallo la creación de la publicación 2");
     }
   }
+
 
   /** --------------- INICIO FINDALL ---------------------- */
-  /*
+
   async findAll(user: UserActiveInterface) {
-   
     try {
+      // Creamos un constructor de consultas utilizando el repositorio de publicaciones
+      let queryBuilder = this.postsRepository.createQueryBuilder("post");
+
+      // Si el usuario es ADMIN, regresamos todos los registros de publicaciones con sus mascotas asociadas
       if (user && user.role === Role.ADMIN) {
-        return await this.postsRepository.find();
+        // Unimos la tabla de publicaciones con la tabla de mascotas y seleccionamos las mascotas asociadas
+        queryBuilder.leftJoinAndSelect("post.pets", "pet");
       }
+      // Si el usuario es USER, regresamos los registros de publicaciones del usuario con sus mascotas asociadas
       else if (user && user.role === Role.USER) {
-        return await this.postsRepository.find({
-          where: { userIdFk: user.idUser }
-        });
+        // Unimos la tabla de publicaciones con la tabla de mascotas y seleccionamos las mascotas asociadas,
+        // y luego aplicamos un filtro para seleccionar solo las publicaciones del usuario actual
+        queryBuilder.leftJoinAndSelect("post.pets", "pet")
+          .where("post.userIdFk = :userId", { userId: user.idUser });
       }
-      return await this.postsRepository.find({ where: { isActive: 1 } });
+      // Si no hay usuario, regresamos solo los registros activos de publicaciones con sus mascotas asociadas
+      else {
+        // Unimos la tabla de publicaciones con la tabla de mascotas y seleccionamos las mascotas asociadas,
+        // y luego aplicamos un filtro para seleccionar solo las publicaciones activas
+        queryBuilder.leftJoinAndSelect("post.pets", "pet")
+          .where("post.isActive = :isActive", { isActive: 1 });
+      }
+
+      // Ejecutamos la consulta y retornamos los resultados
+      return await queryBuilder.getMany();
     } catch (error) {
+      // En caso de error, lanzamos una excepción BadRequest y proporcionamos un mensaje descriptivo
       throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
     }
-
   }
-*/
-async findAll(user: UserActiveInterface) {
-  try {
-    let queryBuilder = this.postsRepository.createQueryBuilder("post");
 
-    // Si el usuario es ADMIN, regresar todos los registros
-    if (user && user.role === Role.ADMIN) {
-      queryBuilder.leftJoinAndSelect("post.pets", "pet");
-    }
-    // Si el usuario es USER, regresar los registros del usuario
-    else if (user && user.role === Role.USER) {
-      queryBuilder.leftJoinAndSelect("post.pets", "pet")
-                  .where("post.userIdFk = :userId", { userId: user.idUser });
-    } 
-    // Si no hay usuario, regresar solo los registros activos
-    else {
-      queryBuilder.leftJoinAndSelect("post.pets", "pet")
-                  .where("post.isActive = :isActive", { isActive: 1 });
-    }
-
-    return await queryBuilder.getMany();
-  } catch (error) {
-    throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE POST');
-  }
-}
 
 
   /** --------------- FIN FINDALL ---------------------- */
-  
+
   async findOne(id: number) {
     try {
       return await this.postsRepository.findOne({ where: { idPost: id } });
@@ -92,35 +89,47 @@ async findAll(user: UserActiveInterface) {
   }
 
   /** +++++++++++++++ UPDATE INICIO +++++++++++++++ */
+  // Método para actualizar una publicación existente en la base de datos
   async update(id: number, updatePostDto: CreatePostDto) {
     try {
+      // Actualiza la publicación en la base de datos utilizando el ID proporcionado
       const updatePost = await this.postsRepository.update(id, updatePostDto);
+
+      // Verifica si la actualización fue exitosa
       if (updatePost) {
-        return { message: 'Post updated successfully' };
+        // Si la actualización fue exitosa, devuelve un mensaje de éxito
+        return { message: 'Publicación actualizada exitosamente' };
       } else {
-        return { message: 'Ha ocurrido un error al intentar actualizar la publicacion' };
+        // Si la actualización falla, devuelve un mensaje de error
+        return { message: 'Ha ocurrido un error al intentar actualizar la publicación' };
       }
     } catch (error) {
-      throw new InternalServerErrorException("DB query failed");
+      // Si hay un error durante el proceso, lanza una excepción de error interno
+      throw new InternalServerErrorException("La consulta a la base de datos ha fallado");
     }
   }
-  /** +++++++++++++++ UPDATE FIN +++++++++++++++ */
-    async softDelete(id: number) {
-      try {
-        const posting = await this.findOne(id);
-        if (!posting) {
-          throw new NotFoundException('Post not found');
-        }
-  
-        if (posting.isActive == 1) {
-          posting.isActive = 0;
-        }
-        else {
-          posting.isActive = 1;
-        }
-        await this.postsRepository.save(posting);
-      } catch (error) {
-        throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING TO DELETE THE POST');
+
+  // Método para realizar un borrado lógico de una publicación
+  async softDelete(id: number) {
+    try {
+      // Busca la publicación en la base de datos utilizando el ID proporcionado
+      const posting = await this.findOne(id);
+
+      // Verifica si la publicación existe
+      if (!posting) {
+        // Si la publicación no existe, lanza una excepción de "No encontrado"
+        throw new NotFoundException('Publicación no encontrada');
       }
+
+      // Cambia el estado de activación de la publicación (si está activa, la desactiva, y viceversa)
+      posting.isActive = posting.isActive == 1 ? 0 : 1;
+
+      // Guarda los cambios en la base de datos
+      await this.postsRepository.save(posting);
+    } catch (error) {
+      // Si hay un error durante el proceso, lanza una excepción de error de solicitud incorrecta
+      throw new BadRequestException(error, 'Error al intentar eliminar la publicación');
     }
+  }
+
 }
