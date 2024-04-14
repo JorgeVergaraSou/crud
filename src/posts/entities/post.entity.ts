@@ -5,48 +5,44 @@ import { typePostEnum } from "../../common/enums/typePost";
 
 @Entity()
 export class Posts {
-    @PrimaryGeneratedColumn()
-    idPost: number;
+     @PrimaryGeneratedColumn()
+     idPost: number;
 
-    @Column({ type: 'enum', enum: typePostEnum })
-    typePost: typePostEnum;
+     @Column({ type: 'enum', enum: typePostEnum })
+     typePost: typePostEnum;
 
-    @Column()
-    title: string;
+     @Column()
+     title: string;
 
-    @Column()
-    content: string;
+     @Column()
+     content: string;
 
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) 
-    postDate: Date;
+     @Column({ default: () => 'CURRENT_TIMESTAMP' })
+     postDate: Date;
 
-    @Column({ default: 1})
-    isActive: number;
-    
-    @Column({ default: () => 'CURRENT_TIMESTAMP' }) 
-    softDeleteDate: Date;
+     @Column({ default: 1 })
+     isActive: number;
 
-    @ManyToOne(() => User, (user) => user.posting)
-    @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
-    user: User;
+     @Column({ default: () => 'CURRENT_TIMESTAMP' })
+     softDeleteDate: Date;
 
-    @Column()
-    userIdFk: number;
-/*
-    @OneToMany(() => Pets, (pet) => pet.idPet)
-    pets: Pets[];
-    */
-/*
-    @OneToMany(() => Pets, pet => pet.post)
-    pet: Pets[];
-*/
-    /*
-          @ManyToOne(() => Pets, (pets) => pets.idPet,
+     @ManyToOne(() => User, (user) => user.posting)
+     @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
+     user: User;
+
+     @Column()
+     userIdFk: number;
+
+     // En la entidad Posts
+     @OneToMany(() => Pets, pet => pet.post)
+     pets: Pets[];
+
+
+     /*
+     @ManyToOne(() => Pets, (pets) => pets.idPet,
           {
                eager: true
           })
      pets: Pets;
-     */
-
+*/
 }
-

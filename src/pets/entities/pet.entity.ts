@@ -38,12 +38,16 @@ export class Pets {
      @JoinColumn({ name: 'userIdFk', referencedColumnName: 'idUser', })
      user: User;
 
-
-
-     @ManyToOne(() => Posts, (post) => post.idPost)
-     @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost', })
+     // En la entidad Pets
+     @ManyToOne(() => Posts, post => post.pets)
+     @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost' })
      post: Posts;
 
+     /*
+          @ManyToOne(() => Posts, (post) => post.idPost)
+          @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost', })
+          post: Posts;
+     */
      @Column()
      idPostFk: number;
 

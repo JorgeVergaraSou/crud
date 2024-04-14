@@ -36,8 +36,9 @@ export class PostsService {
   }
 
   /** --------------- INICIO FINDALL ---------------------- */
+  /*
   async findAll(user: UserActiveInterface) {
-    /** si el rol es ADMIN, regresara todos los registros */
+   
     try {
       if (user && user.role === Role.ADMIN) {
         return await this.postsRepository.find();
@@ -53,6 +54,32 @@ export class PostsService {
     }
 
   }
+*/
+async findAll(user: UserActiveInterface) {
+  try {
+    let queryBuilder = this.postsRepository.createQueryBuilder("post");
+
+    // Si el usuario es ADMIN, regresar todos los registros
+    if (user && user.role === Role.ADMIN) {
+      queryBuilder.leftJoinAndSelect("post.pets", "pet");
+    }
+    // Si el usuario es USER, regresar los registros del usuario
+    else if (user && user.role === Role.USER) {
+      queryBuilder.leftJoinAndSelect("post.pets", "pet")
+                  .where("post.userIdFk = :userId", { userId: user.idUser });
+    } 
+    // Si no hay usuario, regresar solo los registros activos
+    else {
+      queryBuilder.leftJoinAndSelect("post.pets", "pet")
+                  .where("post.isActive = :isActive", { isActive: 1 });
+    }
+
+    return await queryBuilder.getMany();
+  } catch (error) {
+    throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE POST');
+  }
+}
+
 
   /** --------------- FIN FINDALL ---------------------- */
   
