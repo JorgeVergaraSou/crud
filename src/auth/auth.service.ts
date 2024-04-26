@@ -69,11 +69,13 @@ async register({ password, email, name }: RegisterDto) {
 
     /** aca se crea el token y se le agrega el dato guardado en "payload" */
     const token = await this.jwtService.signAsync(payload);
- 
+    const roleToken = user.role;
     /** ahora retornamos el token y la info que queramos, cada vez que el usuario quiera aceder a una ruta
      * protegida va a tener que enviar el jwt para ser autorizado     */
     return {
       token,
+      email,
+      roleToken
     };
   }
   /** ===================== FIN LOGIN ===================== */
