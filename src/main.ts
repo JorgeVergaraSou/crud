@@ -17,13 +17,7 @@ async function bootstrap() {
                         // CUANDO PUEDE DE NUMBER A STRING O VICE VERSA SEGUN EL "DTO"
     })
   );
-  app.enableCors({
-    origin: '*', // Cambia '*' por el dominio específico que deseas permitir
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    credentials: true,
-  });
+
   // PUERTO 
   await app.listen(3006);
 }
