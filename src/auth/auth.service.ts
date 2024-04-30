@@ -74,6 +74,7 @@ async register({ password, email, name }: RegisterDto) {
      * protegida va a tener que enviar el jwt para ser autorizado     */
     return {
       token,
+      email
     };
   }
   /** ===================== FIN LOGIN ===================== */
