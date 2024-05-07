@@ -25,8 +25,9 @@ async register({ password, email, name }: RegisterDto) {
 
 /** SI EXISTE LANZAMOS UN BADREQUEST */
     if (user) {
-      throw new BadRequestException("Email already exists");
+      throw new BadRequestException("Email already exists auth");
     }
+    
 
 /** SI NO EXISTE SEGUIMOS CON EL REGISTRO */
     /** CIFRAMOS LA CONTRASEÑA */
