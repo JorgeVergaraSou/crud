@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { PetEnum } from "../../common/enums/pet.enum";
 import { Breed } from "../../breeds/entities/breed.entity";
 import { User } from "../../users/entities/user.entity";
@@ -31,6 +31,12 @@ export class Pets {
      @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
      softDeleteDate: Date;
 
+     @CreateDateColumn({ name: 'created_at' })
+     createdAt: Date;
+
+     @UpdateDateColumn({ name: 'update_at' })
+     updateAt: Date;
+
      @Column()
      userIdFk: number;
 
@@ -43,11 +49,6 @@ export class Pets {
      @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost' })
      post: Posts;
 
-     /*
-          @ManyToOne(() => Posts, (post) => post.idPost)
-          @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost', })
-          post: Posts;
-     */
      @Column()
      idPostFk: number;
 

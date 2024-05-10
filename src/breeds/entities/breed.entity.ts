@@ -1,5 +1,5 @@
 import { Pets } from "src/pets/entities/pet.entity";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Breed {
@@ -9,6 +9,12 @@ export class Breed {
 
     @Column({ length: 50})
     nameBreed: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'update_at' })
+    updateAt: Date;
 
     @Column({ default: 1 })
     isActive: number;

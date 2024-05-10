@@ -40,7 +40,6 @@ export class PostsService {
     }
   }
 
-
   /** --------------- INICIO FINDALL ---------------------- */
 
   async findAll(user: UserActiveInterface) {
@@ -75,9 +74,6 @@ export class PostsService {
       throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED');
     }
   }
-
-
-
   /** --------------- FIN FINDALL ---------------------- */
 
   async findOne(id: number) {
@@ -131,5 +127,4 @@ export class PostsService {
       throw new BadRequestException(error, 'Error al intentar eliminar la publicación');
     }
   }
-
 }
