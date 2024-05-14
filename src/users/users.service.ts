@@ -27,6 +27,7 @@ export class UsersService {
 
   /* lo que hace es buscar un usuario por mail y saber si existe */
   findOneByEmail(email: string){
+    
     return this.userRepository.findOneBy({ email })
   }
 

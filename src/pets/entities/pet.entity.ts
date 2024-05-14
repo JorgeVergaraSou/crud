@@ -25,6 +25,12 @@ export class Pets {
      @Column()
      image: string;
 
+     @CreateDateColumn({ name: 'created_at' })
+     createdAt: Date;
+ 
+     @UpdateDateColumn({ name: 'update_at' })
+     updateAt: Date;
+
      @Column({ default: 1 })
      isActive: number;
 
