@@ -1,5 +1,5 @@
 import { Role } from "../../common/enums/role.enum";
-import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Pets } from "src/pets/entities/pet.entity";
 import { Posts } from "src/posts/entities/post.entity";
 
@@ -29,6 +29,12 @@ export class User {
 
     @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
     softDeleteDate: Date;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'update_at' })
+    updateAt: Date;
 /*
     @DeleteDateColumn() // SE USA PARA HACER ELIMINACIONES LOGICAS
     deleteAt: Date;

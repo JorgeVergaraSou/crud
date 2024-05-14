@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, DeleteDateColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { PetEnum } from "../../common/enums/pet.enum";
 import { Breed } from "../../breeds/entities/breed.entity";
 import { User } from "../../users/entities/user.entity";
@@ -24,6 +24,12 @@ export class Pets {
 
      @Column()
      image: string;
+
+     @CreateDateColumn({ name: 'created_at' })
+     createdAt: Date;
+ 
+     @UpdateDateColumn({ name: 'update_at' })
+     updateAt: Date;
 
      @Column({ default: 1 })
      isActive: number;

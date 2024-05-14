@@ -3,9 +3,9 @@ import { typePostEnum } from "../../common/enums/typePost";
 
 export class CreatePostDto {    
     
-    @IsEnum(typePostEnum) // Valida que el valor sea uno de los miembros del enum
+    @IsNumber()
     @IsOptional()
-    typePost: typePostEnum;
+    typePost: number;
 
     @IsString()
     @IsOptional()
