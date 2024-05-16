@@ -40,12 +40,4 @@ export class Posts {
      @OneToMany(() => Pets, pet => pet.post)
      pets: Pets[];
 
-
-     /*
-     @ManyToOne(() => Pets, (pets) => pets.idPet,
-          {
-               eager: true
-          })
-     pets: Pets;
-*/
 }

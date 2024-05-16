@@ -49,11 +49,6 @@ export class Pets {
      @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost' })
      post: Posts;
 
-     /*
-          @ManyToOne(() => Posts, (post) => post.idPost)
-          @JoinColumn({ name: 'idPostFk', referencedColumnName: 'idPost', })
-          post: Posts;
-     */
      @Column()
      idPostFk: number;
 
@@ -62,6 +57,5 @@ export class Pets {
                eager: true
           })
      breed: Breed;
-
 
 }
