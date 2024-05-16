@@ -40,19 +40,19 @@ export class PetsService {
   /** +++++++++++++++ CREATE FIN +++++++++++++++ */
 
   /** --------------- INICIO FINDALL ---------------------- */
-  async findAll(user: UserActiveInterface) { // Método para buscar todas las mascotas
-    try {
-      if (user && user.role === Role.ADMIN) { // Si el usuario es ADMIN
-        return await this.petRepository.find(); // Devuelve todas las mascotas
+  async findAll(userId: number, user: UserActiveInterface) { 
+    try {      
+     /* if (user && user.role === Role.ADMIN) { 
+        return await this.petRepository.find(); 
       }
-      else if (user && user.role === Role.USER) { // Si el usuario es USER
-        return await this.petRepository.find({ // Devuelve las mascotas del usuario
-          where: { userIdFk: user.idUser }
+      else if (user && user.role === Role.USER) { */
+        return await this.petRepository.find({ 
+          where: { userIdFk: userId }
         });
-      }
-      return await this.petRepository.find({ where: { isActive: 1 } }); // Si no hay usuario, devuelve las mascotas activas
+     // }
+      //return await this.petRepository.find({ where: { isActive: 1 } }); 
     } catch (error) {
-      throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED'); // Lanza una excepción si falla la consulta
+      throw new BadRequestException(error, 'QUERY FAILED WHEN TRYING LIST THE BREED'); 
     } 
   }
 

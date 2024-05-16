@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedException, Query } from '@nestjs/common';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
@@ -17,11 +17,18 @@ export class PetsController {
     return this.petsService.create(createPetDto, user); // Llama al método create del servicio de mascotas y devuelve el resultado
   }
 
-  @Get() // Define un endpoint para manejar las solicitudes GET a la ruta base del controlador (/pets)
-  findAll(@ActiveUser() user: UserActiveInterface) { // Maneja la solicitud GET para buscar todas las mascotas
-    return this.petsService.findAll(user); // Llama al método findAll del servicio de mascotas y devuelve el resultado
-  }
+  @Get()
+findAll(@Query('userId') userId: number, @ActiveUser() user: UserActiveInterface) {
 
+  return this.petsService.findAll(userId, user);
+}
+
+  /*
+  @Get() 
+  findAll(@ActiveUser() user: UserActiveInterface) { 
+    return this.petsService.findAll(user); 
+  }
+*/
   @Get(':id') // Define un endpoint para manejar las solicitudes GET a una ruta específica del controlador (/pets/:id)
   findOne(@Param('id') id: number) { // Maneja la solicitud GET para buscar una mascota por su ID
     return this.petsService.findOne(id); // Llama al método findOne del servicio de mascotas y devuelve el resultado
