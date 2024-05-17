@@ -11,7 +11,7 @@ import { jwtConstants } from './constants/jwt.constant';
     JwtModule.register({ /** PARA USAR EL JWT EL SERVICE, DEBEMOS IMPORTARLO ACA EN EL MODULO */
       global: true, /** AL HACERLO GLOBAL, PERMITE QUE CUALQUIER SERVICIO USE JWT */
       secret: jwtConstants.secret, /** PALABRA SECRETA QUE SE USA PARA VERIFICAR QUE EL JWT ES VALIDO */
-      signOptions: { expiresIn: "1h" }, /** TIEMPO DE DURACION DE LA SESION*/
+      signOptions: { expiresIn: "2h" }, /** TIEMPO DE DURACION DE LA SESION*/
     }),], 
   controllers: [AuthController],
   providers: [AuthService],
