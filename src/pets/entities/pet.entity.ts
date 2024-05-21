@@ -37,12 +37,6 @@ export class Pets {
      @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Usa una función para que TypeORM interprete CURRENT_TIMESTAMP como una función de MySQL
      softDeleteDate: Date;
 
-     @CreateDateColumn({ name: 'created_at' })
-     createdAt: Date;
-
-     @UpdateDateColumn({ name: 'update_at' })
-     updateAt: Date;
-
      @Column()
      userIdFk: number;
 

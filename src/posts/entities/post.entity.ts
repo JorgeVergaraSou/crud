@@ -16,20 +16,10 @@ export class Posts {
 
      @Column()
      content: string;
-<<<<<<< HEAD
-/*
-     @Column({ default: () => 'CURRENT_TIMESTAMP' })
-     postDate: Date;
-*/
-     @CreateDateColumn({ name: 'created_at' })
-     createdAt: Date;
-
-=======
 
      @CreateDateColumn({ name: 'created_at' })
      createdAt: Date;
  
->>>>>>> 4bf5702d2d92b355eb43d9a2fb8f542bfbebeb89
      @UpdateDateColumn({ name: 'update_at' })
      updateAt: Date;
 
