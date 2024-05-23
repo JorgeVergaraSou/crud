@@ -19,24 +19,14 @@ export class PetsService {
     private readonly breedService: BreedsService) { } // Inyecta el servicio de BreedsService
 
   /** +++++++++++++++ CREATE INICIO +++++++++++++++ */
-  async create(createPetDto: CreatePetDto, user: UserActiveInterface) { // Método para crear una nueva mascota
-    try {
-      const breed = await this.breedService.validateBreed(createPetDto.breed) // Valida la raza de la mascota
-      const insertPet = await this.petRepository.save({ // Guarda la mascota en la base de datos
-        ...createPetDto, // Utiliza los datos proporcionados para crear la mascota
-        breed: breed, // Asigna la raza validada a la mascota
-        userIdFk: user.idUser // Asigna el ID del usuario actual como dueño de la mascota
-      })
 
-      if (insertPet) {
-        return { message: 'successfully created pet' } // Devuelve un mensaje de éxito si la mascota se crea correctamente
-      } else {
-        throw new InternalServerErrorException("Error when creating the pet"); // Lanza una excepción si falla la creación de la mascota
-      }
-    } catch (error) {
-      throw new InternalServerErrorException("Error when calling the database"); // Lanza una excepción si hay un error al llamar a la base de datos
-    }
+  async createPet(createPetDto: CreatePetDto): Promise<Pets> {
+    const newPet = this.petRepository.create(createPetDto);
+    return this.petRepository.save(newPet);
   }
+
+
+
   /** +++++++++++++++ CREATE FIN +++++++++++++++ */
 
   /** --------------- INICIO FINDALL ---------------------- */
