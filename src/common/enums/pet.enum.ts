@@ -1,4 +1,5 @@
 export enum PetEnum {
-    CAT = 'cat',
-    DOG = 'dog',
+    GATO = 'gato',
+    PERRO = 'perro',
+    AVE = 'ave',
   }
