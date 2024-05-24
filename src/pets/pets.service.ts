@@ -3,7 +3,7 @@ import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pets } from './entities/pet.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { Breed } from '../breeds/entities/breed.entity';
 import { UserActiveInterface } from '../common/interfaces/user-active.interface';
 import { Role } from '../common/enums/role.enum';
@@ -21,7 +21,7 @@ export class PetsService {
   /** +++++++++++++++ CREATE INICIO +++++++++++++++ */
 
   async createPet(createPetDto: CreatePetDto): Promise<Pets> {
-    const newPet = this.petRepository.create(createPetDto);
+    const newPet = this.petRepository.create(createPetDto as DeepPartial<Pets>);
     return this.petRepository.save(newPet);
   }
 
